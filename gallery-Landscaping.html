@@ -69,6 +69,7 @@
     <script type="text/javascript" defer>
                     function send_sms(slug){
                         console.log('send_sms',1, slug)
+                        event.preventDefault()
                         function uuidV4() {
                             return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
                               (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -187,7 +188,6 @@
                         }
                         const getSelectedServices = () =>{
                             const allSelectedServiced = Array.from(document.querySelectorAll('[id^="contact-service"]'))
-
                             if (allSelectedServiced.length){
                                 return allSelectedServiced.filter( (x)=> x.checked
                             ).map(item => item.value).join(",");
@@ -236,7 +236,7 @@
                                 sender_number: cleaned_sender_number,
                                 sender_message: sender_message,
                                 sender_address: sender_address,
-                                sender_contact_date: sender_contact_date,
+                                sender_date: sender_contact_date,
                                 photo,
                                 services
                             })
@@ -248,11 +248,26 @@
                             return result.json();
                         })
                         .then(result => {
+                            const sendTextModalId = document.getElementById("send-text-modal")
+                            sendTextModalId.style.display = 'none'
+                            const modalId = document.getElementById("text-thank-you")
+                            modalId.style.display = 'block';
+                            return result
+                        })
+                        .catch(result => {
                             console.log(result)
-                            alert("Your message has been sent!")
-                            location.reload()
+                            alert("Please make sure to fill out each field")
                         })
 
+                        setTimeout(() => {
+                            const modalId = document.getElementById("text-thank-you")
+                            modalId.style.display = 'none';
+                            reload()
+                        }, 5000);
+
+                        const reload = () => {
+                            location.reload()
+                        }
 
                     }
                 
@@ -352,8 +367,8 @@
                         class="flex items-center h-full transition-all duration-200 origin-left"
                     >
                         <!-- Logo Link -->
-                        <a
-                            href="/"
+                    
+                        <a  href= " index "
                             class="flex items-center justify-center flex-shrink-0 pr-5 bg-white rounded-md  focus:ring-2 focus:outline-none ring-primary ring-opacity-75 ring-offset-2"
                         >
                             <img
@@ -362,6 +377,7 @@
                                 alt="Brand Logo"
                             />
                         </a>
+                    
                     </div>
                     <!-- Links -->
                     <div
@@ -449,7 +465,7 @@
                                         <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
                                                 <!-- Render each sublink -->
-                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. &#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;service-Landscaping&#x27;}, {&#x27;title&#x27;: &quot;Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.&quot;, &#x27;copy&#x27;: &#x27;Patio Design &amp; Construction&#x27;, &#x27;href&#x27;: &#x27;service-Patio-Design-&amp;-Construction&#x27;}, {&#x27;title&#x27;: &#x27;Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;service-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.&#x27;, &#x27;copy&#x27;: &#x27;Sod Layouts&#x27;, &#x27;href&#x27;: &#x27;service-Sod-Layouts&#x27;}, {&#x27;title&#x27;: &#x27;Our drainage service provides homeowners with a customized drainage solution to help keep their property free of water damage. We use the latest technology and equipment to ensure that your property is properly drained and protected from water damage.&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;service-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;service-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our erosion control service is a vital part of our landscaping near me company. We use plants, mulch, and rocks to stabilize soil and prevent erosion. We can also help you with drainage solutions to keep your property healthy and looking great.&#x27;, &#x27;copy&#x27;: &#x27;Erosion Control&#x27;, &#x27;href&#x27;: &#x27;service-Erosion-Control&#x27;}]"> -->
+                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. &#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;service-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;service-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;service-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our drainage service provides homeowners with a customized drainage solution to help keep their property free of water damage. We use the latest technology and equipment to ensure that your property is properly drained and protected from water damage.&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;service-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.&#x27;, &#x27;copy&#x27;: &#x27;Sod Layouts&#x27;, &#x27;href&#x27;: &#x27;service-Sod-Layouts&#x27;}, {&#x27;title&#x27;: &#x27;Our erosion control service is a vital part of our landscaping near me company. We use plants, mulch, and rocks to stabilize soil and prevent erosion. We can also help you with drainage solutions to keep your property healthy and looking great.&#x27;, &#x27;copy&#x27;: &#x27;Erosion Control&#x27;, &#x27;href&#x27;: &#x27;service-Erosion-Control&#x27;}]"> -->
                                                   
                                                     <a
                                                         href=" service-Landscaping "
@@ -458,17 +474,6 @@
                                                     >
                                                         <!-- <p class="text-base font-medium text-gray-900">We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. </p> -->
                                                         <p class="mt-1 text-sm text-gray-500">Landscaping</p>
-                                                    </a>
-                                                <!-- </each> -->
-                                               <!--  -->
-                                                 
-                                                    <a
-                                                        href=" service-Patio-Design-&amp;-Construction "
-                                                        role="menuitem"
-                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
-                                                    >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Patio Design &amp; Construction</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -485,12 +490,12 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" service-Sod-Layouts "
+                                                        href=" service-Grading "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -507,12 +512,12 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" service-Grading "
+                                                        href=" service-Sod-Layouts "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -593,7 +598,7 @@
                                         <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
                                                 <!-- Render each sublink -->
-                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Hardscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Hardscaping&#x27;}, {&#x27;title&#x27;: &#x27;All Photos&#x27;, &#x27;copy&#x27;: &#x27;All Photos&#x27;, &#x27;href&#x27;: &#x27;gallery-All&#x27;}]"> -->
+                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;gallery-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;gallery-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;gallery-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;All Photos&#x27;, &#x27;copy&#x27;: &#x27;All Photos&#x27;, &#x27;href&#x27;: &#x27;gallery-All&#x27;}]"> -->
                                                   
                                                     <a
                                                         href=" gallery-Landscaping "
@@ -607,12 +612,34 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" gallery-Hardscaping "
+                                                        href=" gallery-Hydroseeding "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
                                                         <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Hardscaping</p>
+                                                        <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
+                                                    </a>
+                                                <!-- </each> -->
+                                               <!--  -->
+                                                 
+                                                    <a
+                                                        href=" gallery-Grading "
+                                                        role="menuitem"
+                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
+                                                    >
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                    </a>
+                                                <!-- </each> -->
+                                               <!--  -->
+                                                 
+                                                    <a
+                                                        href=" gallery-Drainage "
+                                                        role="menuitem"
+                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
+                                                    >
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Drainage</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -824,21 +851,15 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Patio-Design-&amp;-Construction" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Patio Design &amp; Construction</p>
-                                                </a>
-                                            <!-- </each> -->
-                                            
                                                 <a href="service-Hydroseeding" role="menuitem" class="block p-3 -m-3 transition rounded-md">
                                                     <!-- <p class="text-base font-medium text-gray-900">Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!</p> -->
                                                     <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Sod-Layouts" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
+                                                <a href="service-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -848,9 +869,9 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                <a href="service-Sod-Layouts" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -916,9 +937,21 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="gallery-Hardscaping" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                <a href="gallery-Hydroseeding" role="menuitem" class="block p-3 -m-3 transition rounded-md">
                                                     <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Hardscaping</p>
+                                                    <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
+                                                </a>
+                                            <!-- </each> -->
+                                            
+                                                <a href="gallery-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                </a>
+                                            <!-- </each> -->
+                                            
+                                                <a href="gallery-Drainage" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Drainage</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -1045,7 +1078,7 @@
 <div
     x-data="{
         activeImage: 0,
-        amountOfImages: 37,
+        amountOfImages: 25,
         next() {
             if (this.activeImage < this.amountOfImages - 1)
                 this.activeImage ++;
@@ -1150,237 +1183,6 @@
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
                     <button @click="activeImage = 4; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d7262db-037c-4dea-b32c-dc5d02c51d41.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/2d7262db-037c-4dea-b32c-dc5d02c51d41.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d7262db-037c-4dea-b32c-dc5d02c51d41.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/2d7262db-037c-4dea-b32c-dc5d02c51d41.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 5; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bc79836d-b0eb-49d0-b9c4-90bf3372a57d.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/bc79836d-b0eb-49d0-b9c4-90bf3372a57d.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bc79836d-b0eb-49d0-b9c4-90bf3372a57d.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/bc79836d-b0eb-49d0-b9c4-90bf3372a57d.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 6; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e5b2f723-b0f4-40ac-8fcf-8cdf886d4c0b.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/e5b2f723-b0f4-40ac-8fcf-8cdf886d4c0b.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e5b2f723-b0f4-40ac-8fcf-8cdf886d4c0b.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/e5b2f723-b0f4-40ac-8fcf-8cdf886d4c0b.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 7; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/62966c9a-887b-46e7-b532-433c505cbf9d.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/62966c9a-887b-46e7-b532-433c505cbf9d.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/62966c9a-887b-46e7-b532-433c505cbf9d.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/62966c9a-887b-46e7-b532-433c505cbf9d.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 8; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/ac9aa61a-c67c-40b7-ba1a-3478ed253616.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/ac9aa61a-c67c-40b7-ba1a-3478ed253616.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/ac9aa61a-c67c-40b7-ba1a-3478ed253616.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/ac9aa61a-c67c-40b7-ba1a-3478ed253616.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 9; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/f271fc8c-9589-4346-aeff-1e21e7bd9f44.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/f271fc8c-9589-4346-aeff-1e21e7bd9f44.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/f271fc8c-9589-4346-aeff-1e21e7bd9f44.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/f271fc8c-9589-4346-aeff-1e21e7bd9f44.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 10; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/690ada9a-3b38-4f14-8ed9-b5210c252aaa.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/690ada9a-3b38-4f14-8ed9-b5210c252aaa.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/690ada9a-3b38-4f14-8ed9-b5210c252aaa.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/690ada9a-3b38-4f14-8ed9-b5210c252aaa.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 11; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a76a660d-5a9c-4815-8c1a-bb7f1e74f7ed.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/a76a660d-5a9c-4815-8c1a-bb7f1e74f7ed.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a76a660d-5a9c-4815-8c1a-bb7f1e74f7ed.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/a76a660d-5a9c-4815-8c1a-bb7f1e74f7ed.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 12; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/00bc59d9-11d6-42ff-a33a-b7abffbdab01.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/00bc59d9-11d6-42ff-a33a-b7abffbdab01.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/00bc59d9-11d6-42ff-a33a-b7abffbdab01.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/00bc59d9-11d6-42ff-a33a-b7abffbdab01.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 13; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/99dedd02-719d-4d96-b2a7-c627748472d5.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/99dedd02-719d-4d96-b2a7-c627748472d5.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/99dedd02-719d-4d96-b2a7-c627748472d5.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/99dedd02-719d-4d96-b2a7-c627748472d5.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 14; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/24f55685-a11f-4633-8fb7-35ea5631da13.png" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/24f55685-a11f-4633-8fb7-35ea5631da13.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/24f55685-a11f-4633-8fb7-35ea5631da13.png" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/24f55685-a11f-4633-8fb7-35ea5631da13.png" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 15; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/168e073d-7c8f-4d59-aa07-a960b45c80c6.png" alt="" /> -->
                              
                                 <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/168e073d-7c8f-4d59-aa07-a960b45c80c6.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
@@ -1400,7 +1202,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 16; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 5; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d7e80979-ab3e-48d0-b644-9b12cdd0cf83.png" alt="" /> -->
                              
@@ -1421,7 +1223,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 17; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 6; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/3a19a9be-67be-4d55-8ae3-78dcb57a3c7c.png" alt="" /> -->
                              
@@ -1442,7 +1244,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 18; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 7; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/9f09004b-21a8-4a8b-bf7b-6da786d2ae04.png" alt="" /> -->
                              
@@ -1463,7 +1265,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 19; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 8; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d5885c8-c395-4fed-b74a-c201f27d5609.png" alt="" /> -->
                              
@@ -1484,7 +1286,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 20; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 9; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d5a3f428-bb57-4592-bd15-ba08da990bef.png" alt="" /> -->
                              
@@ -1505,7 +1307,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 21; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 10; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/063dcca2-402d-4910-abcd-c4f113013176.png" alt="" /> -->
                              
@@ -1526,7 +1328,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 22; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 11; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b3932efd-8b1f-44a5-aa0e-84f1eb3b65c1.png" alt="" /> -->
                              
@@ -1547,7 +1349,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 23; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 12; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0d558eb3-0d3e-4986-9be5-683c1cdba87c.png" alt="" /> -->
                              
@@ -1568,7 +1370,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 24; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 13; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/528b8a5f-adfe-4c3a-8a68-269b79039abf.png" alt="" /> -->
                              
@@ -1589,7 +1391,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 25; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 14; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/6650384a-76ef-4b40-a9d7-f804c48250bb.png" alt="" /> -->
                              
@@ -1610,7 +1412,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 26; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 15; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/5ef171d0-bc02-44c6-a4bf-3d6c09622582.jpeg" alt="" /> -->
                              
@@ -1631,7 +1433,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 27; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 16; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bcd05c7e-9f41-4c5f-82de-b2a97dcafcc4.jpeg" alt="" /> -->
                              
@@ -1652,7 +1454,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 28; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 17; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0c60c852-d4ca-475a-bb8c-19aeb7b10de3.jpeg" alt="" /> -->
                              
@@ -1673,7 +1475,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 29; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 18; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/502e6302-c8ac-478c-ab40-9f218c6401ed.jpeg" alt="" /> -->
                              
@@ -1694,7 +1496,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 30; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 19; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/1fef004c-c2f2-43b7-b53e-e1d86a26f1ed.jpeg" alt="" /> -->
                              
@@ -1715,7 +1517,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 31; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 20; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/86559b70-fff9-44c1-9b37-6ca6dc2059c7.jpeg" alt="" /> -->
                              
@@ -1736,7 +1538,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 32; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 21; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e6c2ef39-d329-43e0-af23-5196c32bd5e2.jpeg" alt="" /> -->
                              
@@ -1757,7 +1559,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 33; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 22; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b4d24544-e823-41b2-96e9-f47ab3496491.jpeg" alt="" /> -->
                              
@@ -1778,7 +1580,7 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 34; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 23; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/fb85949d-48b8-4636-ba62-21da0cbf4827.jpeg" alt="" /> -->
                              
@@ -1799,34 +1601,13 @@
             <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
             <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
                 <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 35; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
+                    <button @click="activeImage = 24; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
                         <div class="aspect-w-3 aspect-h-2">
                             <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a5eea823-ed18-418d-a19e-4f92de09daf7.jpeg" alt="" /> -->
                              
                                 <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/a5eea823-ed18-418d-a19e-4f92de09daf7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
                                 <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a5eea823-ed18-418d-a19e-4f92de09daf7.jpeg" alt="" /> -->
                                 <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/a5eea823-ed18-418d-a19e-4f92de09daf7.jpeg" alt="" /> -->
-                            
-                        </div>
-
-                        <div class="space-y-1 text-lg font-medium leading-6">
-                            <p class="line-clamp-3"></p>
-                            <h3 class="text-primary"></h3>
-                        </div>
-                    </button>
-                </div>
-            </li>
-        
-            <!-- Single Item - We only want to show 3 items on mobile so we check the current index and attach a hidden class if necessary -->
-            <li x-cloak x-data="{ shown: false }" x-intersect.full="shown = true" class=" block ">
-                <div x-show="shown" x-transition:enter="transition duration-1000" x-transition:enter-start="transform translate-y-20" x-transition:enter-end="transform translate-y-0">
-                    <button @click="activeImage = 36; galleryModalOpen = true" class="block w-full h-full space-y-4 text-left rounded focus:outline-none focus-visible:ring ring-primary ring-offset-2 ring-opacity-75">
-                        <div class="aspect-w-3 aspect-h-2">
-                            <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/cd75c97b-dc2d-4f03-aee4-94c048f8e7d7.jpeg" alt="" /> -->
-                             
-                                <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/media/cd75c97b-dc2d-4f03-aee4-94c048f8e7d7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/> 
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/cd75c97b-dc2d-4f03-aee4-94c048f8e7d7.jpeg" alt="" /> -->
-                                <!-- <img class="object-cover rounded-lg shadow-lg" src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/x/media/cd75c97b-dc2d-4f03-aee4-94c048f8e7d7.jpeg" alt="" /> -->
                             
                         </div>
 
@@ -1921,7 +1702,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 4">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d7262db-037c-4dea-b32c-dc5d02c51d41.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/168e073d-7c8f-4d59-aa07-a960b45c80c6.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1929,7 +1710,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 5">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bc79836d-b0eb-49d0-b9c4-90bf3372a57d.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d7e80979-ab3e-48d0-b644-9b12cdd0cf83.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1937,7 +1718,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 6">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e5b2f723-b0f4-40ac-8fcf-8cdf886d4c0b.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/3a19a9be-67be-4d55-8ae3-78dcb57a3c7c.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1945,7 +1726,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 7">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/62966c9a-887b-46e7-b532-433c505cbf9d.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/9f09004b-21a8-4a8b-bf7b-6da786d2ae04.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1953,7 +1734,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 8">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/ac9aa61a-c67c-40b7-ba1a-3478ed253616.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d5885c8-c395-4fed-b74a-c201f27d5609.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1961,7 +1742,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 9">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/f271fc8c-9589-4346-aeff-1e21e7bd9f44.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d5a3f428-bb57-4592-bd15-ba08da990bef.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1969,7 +1750,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 10">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/690ada9a-3b38-4f14-8ed9-b5210c252aaa.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/063dcca2-402d-4910-abcd-c4f113013176.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1977,7 +1758,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 11">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a76a660d-5a9c-4815-8c1a-bb7f1e74f7ed.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b3932efd-8b1f-44a5-aa0e-84f1eb3b65c1.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1985,7 +1766,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 12">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/00bc59d9-11d6-42ff-a33a-b7abffbdab01.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0d558eb3-0d3e-4986-9be5-683c1cdba87c.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -1993,7 +1774,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 13">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/99dedd02-719d-4d96-b2a7-c627748472d5.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/528b8a5f-adfe-4c3a-8a68-269b79039abf.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2001,7 +1782,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 14">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/24f55685-a11f-4633-8fb7-35ea5631da13.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/6650384a-76ef-4b40-a9d7-f804c48250bb.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2009,7 +1790,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 15">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/168e073d-7c8f-4d59-aa07-a960b45c80c6.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/5ef171d0-bc02-44c6-a4bf-3d6c09622582.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2017,7 +1798,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 16">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d7e80979-ab3e-48d0-b644-9b12cdd0cf83.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bcd05c7e-9f41-4c5f-82de-b2a97dcafcc4.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2025,7 +1806,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 17">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/3a19a9be-67be-4d55-8ae3-78dcb57a3c7c.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0c60c852-d4ca-475a-bb8c-19aeb7b10de3.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2033,7 +1814,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 18">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/9f09004b-21a8-4a8b-bf7b-6da786d2ae04.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/502e6302-c8ac-478c-ab40-9f218c6401ed.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2041,7 +1822,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 19">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/2d5885c8-c395-4fed-b74a-c201f27d5609.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/1fef004c-c2f2-43b7-b53e-e1d86a26f1ed.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2049,7 +1830,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 20">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/d5a3f428-bb57-4592-bd15-ba08da990bef.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/86559b70-fff9-44c1-9b37-6ca6dc2059c7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2057,7 +1838,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 21">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/063dcca2-402d-4910-abcd-c4f113013176.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e6c2ef39-d329-43e0-af23-5196c32bd5e2.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2065,7 +1846,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 22">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b3932efd-8b1f-44a5-aa0e-84f1eb3b65c1.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b4d24544-e823-41b2-96e9-f47ab3496491.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2073,7 +1854,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 23">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0d558eb3-0d3e-4986-9be5-683c1cdba87c.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
+                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/fb85949d-48b8-4636-ba62-21da0cbf4827.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2081,103 +1862,7 @@
                                     <!-- Transition Wrapper 1 -->
                                     <li class="flex flex-col" x-show="activeImage === 24">
                                             
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/528b8a5f-adfe-4c3a-8a68-269b79039abf.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 25">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/6650384a-76ef-4b40-a9d7-f804c48250bb.png" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 26">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/5ef171d0-bc02-44c6-a4bf-3d6c09622582.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 27">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/bcd05c7e-9f41-4c5f-82de-b2a97dcafcc4.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 28">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/0c60c852-d4ca-475a-bb8c-19aeb7b10de3.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 29">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/502e6302-c8ac-478c-ab40-9f218c6401ed.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 30">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/1fef004c-c2f2-43b7-b53e-e1d86a26f1ed.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 31">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/86559b70-fff9-44c1-9b37-6ca6dc2059c7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 32">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/e6c2ef39-d329-43e0-af23-5196c32bd5e2.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 33">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/b4d24544-e823-41b2-96e9-f47ab3496491.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 34">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/fb85949d-48b8-4636-ba62-21da0cbf4827.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 35">
-                                            
                                             <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/a5eea823-ed18-418d-a19e-4f92de09daf7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
-                                            <p lorem="1" class="mt-3 text-gray-500"></p>
-                                        
-                                    </li>
-                                
-                                    <!-- Transition Wrapper 1 -->
-                                    <li class="flex flex-col" x-show="activeImage === 36">
-                                            
-                                            <img class="mt-2 lg:h-[481px] h-[200px] sm:h-[300px] self-center rounded-md object-cover"  src="https://d3p2r6ofnvoe67.cloudfront.net/fit-in/684x480/media/cd75c97b-dc2d-4f03-aee4-94c048f8e7d7.jpeg" alt="Landscaping for Apex Outdoors Of Volusia in Volusia County, FL" loading="lazy"/>
                                             <p lorem="1" class="mt-3 text-gray-500"></p>
                                         
                                     </li>
@@ -2201,6 +1886,10 @@
         </div>
     </div>
 </section>
+
+
+
+
 
 
 
@@ -2332,7 +2021,7 @@
                       <ul role="list" class="mt-4 -mx-1 space-y-4">
                           <li>
                               <a
-                                  href="#"
+                                  href="index"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
                                   >Home</a
                               >
@@ -2359,13 +2048,7 @@
                           
                           
                           
-                          <li>
-                              <a
-                                  href='sitemap.xml'
-                                  class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Sitemap</a
-                              >
-                          </li>
+                          
                       </ul>
                   </div>
                   <!-- Services Links -->
@@ -2383,14 +2066,6 @@
                           
                           <li>
                               <a
-                                  href="service-Patio-Design-&amp;-Construction"
-                                  class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Patio Design &amp; Construction</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
                                   href="service-Hydroseeding"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
                                   >Hydroseeding</a
@@ -2399,9 +2074,9 @@
                           
                           <li>
                               <a
-                                  href="service-Sod-Layouts"
+                                  href="service-Grading"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Sod Layouts</a
+                                  >Grading</a
                               >
                           </li>
                           
@@ -2415,9 +2090,9 @@
                           
                           <li>
                               <a
-                                  href="service-Grading"
+                                  href="service-Sod-Layouts"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Grading</a
+                                  >Sod Layouts</a
                               >
                           </li>
                           
@@ -2453,63 +2128,35 @@
                   <div class="mt-12 md:mt-0">
                       <h3 class="text-sm font-semibold tracking-wider text-gray-100 uppercase">Hours</h3>
                       <ul role="list" class="mt-4 -mx-1 space-y-4">
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Sun: 8:00am - 6:00am</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Mon: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Tues: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Wed: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Thu: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Fri: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Sat: 8:00am - 6:00am</a
-                              >
-                          </li>
-                          
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Sun:  8:00am - 6:00am 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Mon:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Tues:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Wed:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Thu:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Fri:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Sat:  8:00am - 6:00am 
+                            </li>
+                        
                       </ul>
                   </div>
               </div>
@@ -2551,6 +2198,7 @@
             :aria-labelledby="$id('modal-title')"
             class="fixed inset-0 z-40 md:pt-8 md:pb-20"
             x-trap.noscroll.inert="contactModalOpen"
+            id="send-text-modal"
     >
         <!-- Overlay -->
         <div
@@ -2574,11 +2222,11 @@
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 @click="contactModalOpen = false"
-                class="relative flex items-center justify-center w-full h-full sm:h-max"
+                class="relative flex items-center justify-center w-full h-full"
         >
             <div
                     @click.stop
-                    class="flex flex-col w-full h-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:px-0 sm:my-0 sm:align-middle sm:max-w-3xl"
+                    class="flex flex-col w-full 2xl:h-max 2xl:mt-8 h-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:px-0 sm:my-0 sm:align-middle sm:max-w-3xl"
             >
                 <!-- Header -->
                 <div class="relative px-6 bg-white">
@@ -2680,79 +2328,68 @@
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172573"
-                                                    name="172573"
+                                                    id="contact-service-183803"
+                                                    name="183803"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Landscaping"
                                             />
-                                            <label for="contact-label-service-172573" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
+                                            <label for="contact-label-service-183803" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172574"
-                                                    name="172574"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Patio Design & Construction"
-                                            />
-                                            <label for="contact-label-service-172574" class="ml-3 text-sm font-medium text-gray-700">Patio Design & Construction</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172575"
-                                                    name="172575"
+                                                    id="contact-service-183804"
+                                                    name="183804"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Hydroseeding"
                                             />
-                                            <label for="contact-label-service-172575" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
+                                            <label for="contact-label-service-183804" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172576"
-                                                    name="172576"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Sod Layouts"
-                                            />
-                                            <label for="contact-label-service-172576" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172577"
-                                                    name="172577"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Drainage"
-                                            />
-                                            <label for="contact-label-service-172577" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172578"
-                                                    name="172578"
+                                                    id="contact-service-183805"
+                                                    name="183805"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Grading"
                                             />
-                                            <label for="contact-label-service-172578" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
+                                            <label for="contact-label-service-183805" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172579"
-                                                    name="172579"
+                                                    id="contact-service-183806"
+                                                    name="183806"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Drainage"
+                                            />
+                                            <label for="contact-label-service-183806" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183807"
+                                                    name="183807"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Sod Layouts"
+                                            />
+                                            <label for="contact-label-service-183807" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183808"
+                                                    name="183808"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Erosion Control"
                                             />
-                                            <label for="contact-label-service-172579" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
+                                            <label for="contact-label-service-183808" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
                                         </div>
                                         
                                     </div>
@@ -2784,79 +2421,68 @@
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172573"
-                                                    name="172573"
+                                                    id="contact-service-183803"
+                                                    name="183803"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Landscaping"
                                             />
-                                            <label for="contact-label-service-172573" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
+                                            <label for="contact-label-service-183803" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172574"
-                                                    name="172574"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Patio Design & Construction"
-                                            />
-                                            <label for="contact-label-service-172574" class="ml-3 text-sm font-medium text-gray-700">Patio Design & Construction</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172575"
-                                                    name="172575"
+                                                    id="contact-service-183804"
+                                                    name="183804"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Hydroseeding"
                                             />
-                                            <label for="contact-label-service-172575" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
+                                            <label for="contact-label-service-183804" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172576"
-                                                    name="172576"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Sod Layouts"
-                                            />
-                                            <label for="contact-label-service-172576" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172577"
-                                                    name="172577"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Drainage"
-                                            />
-                                            <label for="contact-label-service-172577" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172578"
-                                                    name="172578"
+                                                    id="contact-service-183805"
+                                                    name="183805"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Grading"
                                             />
-                                            <label for="contact-label-service-172578" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
+                                            <label for="contact-label-service-183805" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172579"
-                                                    name="172579"
+                                                    id="contact-service-183806"
+                                                    name="183806"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Drainage"
+                                            />
+                                            <label for="contact-label-service-183806" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183807"
+                                                    name="183807"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Sod Layouts"
+                                            />
+                                            <label for="contact-label-service-183807" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183808"
+                                                    name="183808"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Erosion Control"
                                             />
-                                            <label for="contact-label-service-172579" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
+                                            <label for="contact-label-service-183808" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
                                         </div>
                                         
                                     </div>
@@ -2909,6 +2535,38 @@
         </div>
     </div>
 </template>
+<div
+	class="fixed top-36 inset-x-0 z-50 mx-auto p-4 border w-96 shadow-lg rounded-md bg-white backdrop-blur-sm"
+    id="text-thank-you"
+    style="display: none"
+>
+	<div class="mt-3 text-center">
+		<div
+			class="mx-auto mb-3 flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+		>
+			<svg
+				class="h-6 w-6 text-green-600"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M5 13l4 4L19 7"
+				></path>
+			</svg>
+		</div>
+		<h3 class="text-lg leading-6 font-medium text-gray-900">Thank you!</h3>
+		<div class="mt-1 px-7 py-3">
+			<p class="text-sm text-gray-500">
+				Your message was sent successfully. We’ll send you a text or give you a call soon.
+			</p>
+		</div>
+	</div>
+</div>
 <!-- Modal -->
 <template x-teleport="body">
     <div x-show="reviewModalOpen" @keydown.escape.prevent.stop="reviewModalOpen = false" role="dialog" aria-modal="true" x-id="['modal-title']" :aria-labelledby="$id('modal-title')" class="fixed inset-0 z-40 pt-8 pb-20" x-trap.noscroll.inert="reviewModalOpen">
