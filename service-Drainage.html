@@ -69,6 +69,7 @@
     <script type="text/javascript" defer>
                     function send_sms(slug){
                         console.log('send_sms',1, slug)
+                        event.preventDefault()
                         function uuidV4() {
                             return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
                               (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -187,7 +188,6 @@
                         }
                         const getSelectedServices = () =>{
                             const allSelectedServiced = Array.from(document.querySelectorAll('[id^="contact-service"]'))
-
                             if (allSelectedServiced.length){
                                 return allSelectedServiced.filter( (x)=> x.checked
                             ).map(item => item.value).join(",");
@@ -236,7 +236,7 @@
                                 sender_number: cleaned_sender_number,
                                 sender_message: sender_message,
                                 sender_address: sender_address,
-                                sender_contact_date: sender_contact_date,
+                                sender_date: sender_contact_date,
                                 photo,
                                 services
                             })
@@ -248,11 +248,26 @@
                             return result.json();
                         })
                         .then(result => {
+                            const sendTextModalId = document.getElementById("send-text-modal")
+                            sendTextModalId.style.display = 'none'
+                            const modalId = document.getElementById("text-thank-you")
+                            modalId.style.display = 'block';
+                            return result
+                        })
+                        .catch(result => {
                             console.log(result)
-                            alert("Your message has been sent!")
-                            location.reload()
+                            alert("Please make sure to fill out each field")
                         })
 
+                        setTimeout(() => {
+                            const modalId = document.getElementById("text-thank-you")
+                            modalId.style.display = 'none';
+                            reload()
+                        }, 5000);
+
+                        const reload = () => {
+                            location.reload()
+                        }
 
                     }
                 
@@ -352,8 +367,8 @@
                         class="flex items-center h-full transition-all duration-200 origin-left"
                     >
                         <!-- Logo Link -->
-                        <a
-                            href="/"
+                    
+                        <a  href= " index "
                             class="flex items-center justify-center flex-shrink-0 pr-5 bg-white rounded-md  focus:ring-2 focus:outline-none ring-primary ring-opacity-75 ring-offset-2"
                         >
                             <img
@@ -362,6 +377,7 @@
                                 alt="Brand Logo"
                             />
                         </a>
+                    
                     </div>
                     <!-- Links -->
                     <div
@@ -449,7 +465,7 @@
                                         <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
                                                 <!-- Render each sublink -->
-                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. &#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;service-Landscaping&#x27;}, {&#x27;title&#x27;: &quot;Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.&quot;, &#x27;copy&#x27;: &#x27;Patio Design &amp; Construction&#x27;, &#x27;href&#x27;: &#x27;service-Patio-Design-&amp;-Construction&#x27;}, {&#x27;title&#x27;: &#x27;Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;service-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.&#x27;, &#x27;copy&#x27;: &#x27;Sod Layouts&#x27;, &#x27;href&#x27;: &#x27;service-Sod-Layouts&#x27;}, {&#x27;title&#x27;: &#x27;Our drainage service provides homeowners with a customized drainage solution to help keep their property free of water damage. We use the latest technology and equipment to ensure that your property is properly drained and protected from water damage.&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;service-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;service-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our erosion control service is a vital part of our landscaping near me company. We use plants, mulch, and rocks to stabilize soil and prevent erosion. We can also help you with drainage solutions to keep your property healthy and looking great.&#x27;, &#x27;copy&#x27;: &#x27;Erosion Control&#x27;, &#x27;href&#x27;: &#x27;service-Erosion-Control&#x27;}]"> -->
+                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. &#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;service-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;service-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;service-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our drainage service provides homeowners with a customized drainage solution to help keep their property free of water damage. We use the latest technology and equipment to ensure that your property is properly drained and protected from water damage.&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;service-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.&#x27;, &#x27;copy&#x27;: &#x27;Sod Layouts&#x27;, &#x27;href&#x27;: &#x27;service-Sod-Layouts&#x27;}, {&#x27;title&#x27;: &#x27;Our erosion control service is a vital part of our landscaping near me company. We use plants, mulch, and rocks to stabilize soil and prevent erosion. We can also help you with drainage solutions to keep your property healthy and looking great.&#x27;, &#x27;copy&#x27;: &#x27;Erosion Control&#x27;, &#x27;href&#x27;: &#x27;service-Erosion-Control&#x27;}]"> -->
                                                   
                                                     <a
                                                         href=" service-Landscaping "
@@ -458,17 +474,6 @@
                                                     >
                                                         <!-- <p class="text-base font-medium text-gray-900">We offer of a variety of landscaping services from mulching to shrub trimming and much more. Please reach out today to have us transform your property. </p> -->
                                                         <p class="mt-1 text-sm text-gray-500">Landscaping</p>
-                                                    </a>
-                                                <!-- </each> -->
-                                               <!--  -->
-                                                 
-                                                    <a
-                                                        href=" service-Patio-Design-&amp;-Construction "
-                                                        role="menuitem"
-                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
-                                                    >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Patio Design &amp; Construction</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -485,12 +490,12 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" service-Sod-Layouts "
+                                                        href=" service-Grading "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -507,12 +512,12 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" service-Grading "
+                                                        href=" service-Sod-Layouts "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
-                                                        <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -593,7 +598,7 @@
                                         <div class="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                                             <div class="relative grid gap-6 px-5 py-6 bg-white sm:gap-8 sm:p-8">
                                                 <!-- Render each sublink -->
-                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Hardscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Hardscaping&#x27;}, {&#x27;title&#x27;: &#x27;All Photos&#x27;, &#x27;copy&#x27;: &#x27;All Photos&#x27;, &#x27;href&#x27;: &#x27;gallery-All&#x27;}]"> -->
+                                                <!-- <each loop="link in [{&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Landscaping&#x27;, &#x27;href&#x27;: &#x27;gallery-Landscaping&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Hydroseeding&#x27;, &#x27;href&#x27;: &#x27;gallery-Hydroseeding&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Grading&#x27;, &#x27;href&#x27;: &#x27;gallery-Grading&#x27;}, {&#x27;title&#x27;: &#x27;Our Best Work&#x27;, &#x27;copy&#x27;: &#x27;Drainage&#x27;, &#x27;href&#x27;: &#x27;gallery-Drainage&#x27;}, {&#x27;title&#x27;: &#x27;All Photos&#x27;, &#x27;copy&#x27;: &#x27;All Photos&#x27;, &#x27;href&#x27;: &#x27;gallery-All&#x27;}]"> -->
                                                   
                                                     <a
                                                         href=" gallery-Landscaping "
@@ -607,12 +612,34 @@
                                                <!--  -->
                                                  
                                                     <a
-                                                        href=" gallery-Hardscaping "
+                                                        href=" gallery-Hydroseeding "
                                                         role="menuitem"
                                                         class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
                                                     >
                                                         <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
-                                                        <p class="mt-1 text-sm text-gray-500">Hardscaping</p>
+                                                        <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
+                                                    </a>
+                                                <!-- </each> -->
+                                               <!--  -->
+                                                 
+                                                    <a
+                                                        href=" gallery-Grading "
+                                                        role="menuitem"
+                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
+                                                    >
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                    </a>
+                                                <!-- </each> -->
+                                               <!--  -->
+                                                 
+                                                    <a
+                                                        href=" gallery-Drainage "
+                                                        role="menuitem"
+                                                        class="block p-3 -m-3 transition rounded-md  focus:outline-none focus:ring-2 ring-primary ring-opacity-75 ring-offset-2 hover:bg-gray-50"
+                                                    >
+                                                        <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                        <p class="mt-1 text-sm text-gray-500">Drainage</p>
                                                     </a>
                                                 <!-- </each> -->
                                                <!--  -->
@@ -824,21 +851,15 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Patio-Design-&amp;-Construction" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our patio design &amp; construction service can create a beautiful and functional outdoor living space for your home. We can work with you to design the perfect patio that fits your needs and budget, and we&#x27;ll handle the construction process so you can enjoy your new space worry-free.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Patio Design &amp; Construction</p>
-                                                </a>
-                                            <!-- </each> -->
-                                            
                                                 <a href="service-Hydroseeding" role="menuitem" class="block p-3 -m-3 transition rounded-md">
                                                     <!-- <p class="text-base font-medium text-gray-900">Our Hydroseeding service is a great way to quickly and easily cover a large area with grass. We can help you get your lawn looking great in no time!</p> -->
                                                     <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Sod-Layouts" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
+                                                <a href="service-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -848,9 +869,9 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="service-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
-                                                    <!-- <p class="text-base font-medium text-gray-900">Our grading service is designed to provide the homeowner with a level surface for their landscaping. We will remove any excess dirt, rocks, or debris from the area and then grade it to ensure that it is level. This will create a foundation for your landscaping and help to keep it looking its best.</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                <a href="service-Sod-Layouts" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Sod Layouts service provides a custom design for your yard using sod. We will work with you to create a beautiful and functional yard that fits your budget.</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Sod Layouts</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -916,9 +937,21 @@
                                                 </a>
                                             <!-- </each> -->
                                             
-                                                <a href="gallery-Hardscaping" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                <a href="gallery-Hydroseeding" role="menuitem" class="block p-3 -m-3 transition rounded-md">
                                                     <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
-                                                    <p class="mt-1 text-sm text-gray-500">Hardscaping</p>
+                                                    <p class="mt-1 text-sm text-gray-500">Hydroseeding</p>
+                                                </a>
+                                            <!-- </each> -->
+                                            
+                                                <a href="gallery-Grading" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Grading</p>
+                                                </a>
+                                            <!-- </each> -->
+                                            
+                                                <a href="gallery-Drainage" role="menuitem" class="block p-3 -m-3 transition rounded-md">
+                                                    <!-- <p class="text-base font-medium text-gray-900">Our Best Work</p> -->
+                                                    <p class="mt-1 text-sm text-gray-500">Drainage</p>
                                                 </a>
                                             <!-- </each> -->
                                             
@@ -1005,8 +1038,6 @@
         </button>
     </div>
 </div>
-
-
 
 
 
@@ -1347,6 +1378,96 @@
                                         />
                                     </svg>
                                     <p lorem="1" class="relative text-lg font-medium">
+                                        So easy to work with! Will definitely use them again in the future.
+                                    </p>
+                                </div>
+                                <footer class="flex items-center justify-between mt-8 space-x-4">
+                                    <div>
+                                        <span class="block font-medium text-primary">Kadin Fuller</span>
+                                        <span class="block font-medium">Volusia County, FL</span>
+                                    </div>
+
+                                    <!-- Social Icon -->
+                                    <div class="flex-shrink-0">
+                                        <span class="sr-only">None</span>
+                                        
+                                    
+                                    </div>
+                                </footer>
+                            </blockquote>
+                        </li>
+                    
+                    
+                </ul>
+            
+                <!-- Single Testimonial Column -->
+                <ul class="space-y-8">
+                    <!-- Loop each of the items (rows) here -->
+                    
+                    
+                    
+
+                        <!-- Review Item -->
+                        <li class=" hidden sm:block  px-6 py-8 rounded-lg shadow md:px-8 xl:pl-16 xl:pr-6 bg-gray-50">
+                            <!-- Star Rating -->
+                            <div class="flex">
+                                <div aria-hidden="true" class="space-x-1.5 flex">
+                                    <!-- TODO: Simply use a for loop here `for i = 1; i < amountOfStars; i++` -->
+                                    
+                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
+                                            <path
+                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    
+                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
+                                            <path
+                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    
+                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
+                                            <path
+                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    
+                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
+                                            <path
+                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    
+                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
+                                            <path
+                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                    
+                                </div>
+                                <!-- TODO: Add the current amount of stars here -->
+                                <span class="sr-only"> out of 5 stars</span>
+                            </div>
+
+                            <blockquote class="mt-6">
+                                <div class="relative">
+                                    <svg
+                                        aria-hidden="true"
+                                        class="absolute top-0 left-0 w-8 h-8 text-gray-200 -translate-x-3 -translate-y-2"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4Zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4Z"
+                                            fill="currentColor"
+                                        />
+                                    </svg>
+                                    <p lorem="1" class="relative text-lg font-medium">
                                         I tell everyone I know to give them a call - they&#x27;re the best there is!
                                     </p>
                                 </div>
@@ -1443,96 +1564,6 @@
                                 <footer class="flex items-center justify-between mt-8 space-x-4">
                                     <div>
                                         <span class="block font-medium text-primary">Jacoby Wheeler</span>
-                                        <span class="block font-medium">Volusia County, FL</span>
-                                    </div>
-
-                                    <!-- Social Icon -->
-                                    <div class="flex-shrink-0">
-                                        <span class="sr-only">None</span>
-                                        
-                                    
-                                    </div>
-                                </footer>
-                            </blockquote>
-                        </li>
-                    
-                    
-                </ul>
-            
-                <!-- Single Testimonial Column -->
-                <ul class="space-y-8">
-                    <!-- Loop each of the items (rows) here -->
-                    
-                    
-                    
-
-                        <!-- Review Item -->
-                        <li class=" hidden sm:block  px-6 py-8 rounded-lg shadow md:px-8 xl:pl-16 xl:pr-6 bg-gray-50">
-                            <!-- Star Rating -->
-                            <div class="flex">
-                                <div aria-hidden="true" class="space-x-1.5 flex">
-                                    <!-- TODO: Simply use a for loop here `for i = 1; i < amountOfStars; i++` -->
-                                    
-                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
-                                            <path
-                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
-                                                fill="currentColor"
-                                            />
-                                        </svg>
-                                    
-                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
-                                            <path
-                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
-                                                fill="currentColor"
-                                            />
-                                        </svg>
-                                    
-                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
-                                            <path
-                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
-                                                fill="currentColor"
-                                            />
-                                        </svg>
-                                    
-                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
-                                            <path
-                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
-                                                fill="currentColor"
-                                            />
-                                        </svg>
-                                    
-                                        <svg class="text-yellow-300" width="30" height="30" fill="none">
-                                            <path
-                                                d="M14.049 2.927c.3-.921 1.603-.921 1.902 0l2.192 6.747a1 1 0 0 0 .951.69h7.094c.969 0 1.372 1.24.588 1.81l-5.74 4.17a1 1 0 0 0-.362 1.117l2.192 6.747c.3.922-.755 1.688-1.54 1.118l-5.738-4.17a1 1 0 0 0-1.176 0l-5.739 4.17c-.784.57-1.838-.197-1.539-1.118l2.192-6.746a1 1 0 0 0-.363-1.119l-5.739-4.17c-.784-.569-.38-1.808.588-1.808h7.094a1 1 0 0 0 .95-.691l2.193-6.747Z"
-                                                fill="currentColor"
-                                            />
-                                        </svg>
-                                    
-                                </div>
-                                <!-- TODO: Add the current amount of stars here -->
-                                <span class="sr-only"> out of 5 stars</span>
-                            </div>
-
-                            <blockquote class="mt-6">
-                                <div class="relative">
-                                    <svg
-                                        aria-hidden="true"
-                                        class="absolute top-0 left-0 w-8 h-8 text-gray-200 -translate-x-3 -translate-y-2"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <path
-                                            d="M9.352 4C4.456 7.456 1 13.12 1 19.36c0 5.088 3.072 8.064 6.624 8.064 3.36 0 5.856-2.688 5.856-5.856 0-3.168-2.208-5.472-5.088-5.472-.576 0-1.344.096-1.536.192.48-3.264 3.552-7.104 6.624-9.024L9.352 4Zm16.512 0c-4.8 3.456-8.256 9.12-8.256 15.36 0 5.088 3.072 8.064 6.624 8.064 3.264 0 5.856-2.688 5.856-5.856 0-3.168-2.304-5.472-5.184-5.472-.576 0-1.248.096-1.44.192.48-3.264 3.456-7.104 6.528-9.024L25.864 4Z"
-                                            fill="currentColor"
-                                        />
-                                    </svg>
-                                    <p lorem="1" class="relative text-lg font-medium">
-                                        So easy to work with! Will definitely use them again in the future.
-                                    </p>
-                                </div>
-                                <footer class="flex items-center justify-between mt-8 space-x-4">
-                                    <div>
-                                        <span class="block font-medium text-primary">Kadin Fuller</span>
                                         <span class="block font-medium">Volusia County, FL</span>
                                     </div>
 
@@ -1825,7 +1856,7 @@
                       <ul role="list" class="mt-4 -mx-1 space-y-4">
                           <li>
                               <a
-                                  href="#"
+                                  href="index"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
                                   >Home</a
                               >
@@ -1852,13 +1883,7 @@
                           
                           
                           
-                          <li>
-                              <a
-                                  href='sitemap.xml'
-                                  class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Sitemap</a
-                              >
-                          </li>
+                          
                       </ul>
                   </div>
                   <!-- Services Links -->
@@ -1876,14 +1901,6 @@
                           
                           <li>
                               <a
-                                  href="service-Patio-Design-&amp;-Construction"
-                                  class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Patio Design &amp; Construction</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
                                   href="service-Hydroseeding"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
                                   >Hydroseeding</a
@@ -1892,9 +1909,9 @@
                           
                           <li>
                               <a
-                                  href="service-Sod-Layouts"
+                                  href="service-Grading"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Sod Layouts</a
+                                  >Grading</a
                               >
                           </li>
                           
@@ -1908,9 +1925,9 @@
                           
                           <li>
                               <a
-                                  href="service-Grading"
+                                  href="service-Sod-Layouts"
                                   class="p-1 text-base text-gray-100 rounded hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-opacity-75"
-                                  >Grading</a
+                                  >Sod Layouts</a
                               >
                           </li>
                           
@@ -1946,63 +1963,35 @@
                   <div class="mt-12 md:mt-0">
                       <h3 class="text-sm font-semibold tracking-wider text-gray-100 uppercase">Hours</h3>
                       <ul role="list" class="mt-4 -mx-1 space-y-4">
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Sun: 8:00am - 6:00am</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Mon: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Tues: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Wed: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Thu: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Fri: 8:00am - 6:00pm</a
-                              >
-                          </li>
-                          
-                          <li>
-                              <a
-                                  href="#"
-                                  class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75"
-                                  >Sat: 8:00am - 6:00am</a
-                              >
-                          </li>
-                          
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Sun:  8:00am - 6:00am 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Mon:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Tues:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Wed:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Thu:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Fri:  8:00am - 6:00pm 
+                            </li>
+                        
+                            <li class="p-1 text-base text-gray-100 rounded  hover:text-gray-300 focus:ring-2 focus:outline-none ring-white ring-offset-2 ring-opacity-75">
+                                Sat:  8:00am - 6:00am 
+                            </li>
+                        
                       </ul>
                   </div>
               </div>
@@ -2044,6 +2033,7 @@
             :aria-labelledby="$id('modal-title')"
             class="fixed inset-0 z-40 md:pt-8 md:pb-20"
             x-trap.noscroll.inert="contactModalOpen"
+            id="send-text-modal"
     >
         <!-- Overlay -->
         <div
@@ -2067,11 +2057,11 @@
                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                 @click="contactModalOpen = false"
-                class="relative flex items-center justify-center w-full h-full sm:h-max"
+                class="relative flex items-center justify-center w-full h-full"
         >
             <div
                     @click.stop
-                    class="flex flex-col w-full h-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:px-0 sm:my-0 sm:align-middle sm:max-w-3xl"
+                    class="flex flex-col w-full 2xl:h-max 2xl:mt-8 h-full overflow-hidden text-left align-bottom transition-all transform bg-white rounded-lg shadow-xl sm:px-0 sm:my-0 sm:align-middle sm:max-w-3xl"
             >
                 <!-- Header -->
                 <div class="relative px-6 bg-white">
@@ -2173,79 +2163,68 @@
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172573"
-                                                    name="172573"
+                                                    id="contact-service-183803"
+                                                    name="183803"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Landscaping"
                                             />
-                                            <label for="contact-label-service-172573" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
+                                            <label for="contact-label-service-183803" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172574"
-                                                    name="172574"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Patio Design & Construction"
-                                            />
-                                            <label for="contact-label-service-172574" class="ml-3 text-sm font-medium text-gray-700">Patio Design & Construction</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172575"
-                                                    name="172575"
+                                                    id="contact-service-183804"
+                                                    name="183804"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Hydroseeding"
                                             />
-                                            <label for="contact-label-service-172575" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
+                                            <label for="contact-label-service-183804" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172576"
-                                                    name="172576"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Sod Layouts"
-                                            />
-                                            <label for="contact-label-service-172576" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172577"
-                                                    name="172577"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Drainage"
-                                            />
-                                            <label for="contact-label-service-172577" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172578"
-                                                    name="172578"
+                                                    id="contact-service-183805"
+                                                    name="183805"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Grading"
                                             />
-                                            <label for="contact-label-service-172578" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
+                                            <label for="contact-label-service-183805" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172579"
-                                                    name="172579"
+                                                    id="contact-service-183806"
+                                                    name="183806"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Drainage"
+                                            />
+                                            <label for="contact-label-service-183806" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183807"
+                                                    name="183807"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Sod Layouts"
+                                            />
+                                            <label for="contact-label-service-183807" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183808"
+                                                    name="183808"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Erosion Control"
                                             />
-                                            <label for="contact-label-service-172579" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
+                                            <label for="contact-label-service-183808" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
                                         </div>
                                         
                                     </div>
@@ -2277,79 +2256,68 @@
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172573"
-                                                    name="172573"
+                                                    id="contact-service-183803"
+                                                    name="183803"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Landscaping"
                                             />
-                                            <label for="contact-label-service-172573" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
+                                            <label for="contact-label-service-183803" class="ml-3 text-sm font-medium text-gray-700">Landscaping</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172574"
-                                                    name="172574"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Patio Design & Construction"
-                                            />
-                                            <label for="contact-label-service-172574" class="ml-3 text-sm font-medium text-gray-700">Patio Design & Construction</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172575"
-                                                    name="172575"
+                                                    id="contact-service-183804"
+                                                    name="183804"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Hydroseeding"
                                             />
-                                            <label for="contact-label-service-172575" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
+                                            <label for="contact-label-service-183804" class="ml-3 text-sm font-medium text-gray-700">Hydroseeding</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172576"
-                                                    name="172576"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Sod Layouts"
-                                            />
-                                            <label for="contact-label-service-172576" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172577"
-                                                    name="172577"
-                                                    type="checkbox"
-                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
-                                                    value="Drainage"
-                                            />
-                                            <label for="contact-label-service-172577" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
-                                        </div>
-                                        
-                                        <div class="flex items-center">
-                                            <input
-                                                    id="contact-service-172578"
-                                                    name="172578"
+                                                    id="contact-service-183805"
+                                                    name="183805"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Grading"
                                             />
-                                            <label for="contact-label-service-172578" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
+                                            <label for="contact-label-service-183805" class="ml-3 text-sm font-medium text-gray-700">Grading</label>
                                         </div>
                                         
                                         <div class="flex items-center">
                                             <input
-                                                    id="contact-service-172579"
-                                                    name="172579"
+                                                    id="contact-service-183806"
+                                                    name="183806"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Drainage"
+                                            />
+                                            <label for="contact-label-service-183806" class="ml-3 text-sm font-medium text-gray-700">Drainage</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183807"
+                                                    name="183807"
+                                                    type="checkbox"
+                                                    class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
+                                                    value="Sod Layouts"
+                                            />
+                                            <label for="contact-label-service-183807" class="ml-3 text-sm font-medium text-gray-700">Sod Layouts</label>
+                                        </div>
+                                        
+                                        <div class="flex items-center">
+                                            <input
+                                                    id="contact-service-183808"
+                                                    name="183808"
                                                     type="checkbox"
                                                     class="w-4 h-4 border-gray-300 rounded text-primary focus:ring-primary"
                                                     value="Erosion Control"
                                             />
-                                            <label for="contact-label-service-172579" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
+                                            <label for="contact-label-service-183808" class="ml-3 text-sm font-medium text-gray-700">Erosion Control</label>
                                         </div>
                                         
                                     </div>
@@ -2402,6 +2370,38 @@
         </div>
     </div>
 </template>
+<div
+	class="fixed top-36 inset-x-0 z-50 mx-auto p-4 border w-96 shadow-lg rounded-md bg-white backdrop-blur-sm"
+    id="text-thank-you"
+    style="display: none"
+>
+	<div class="mt-3 text-center">
+		<div
+			class="mx-auto mb-3 flex items-center justify-center h-12 w-12 rounded-full bg-green-100"
+		>
+			<svg
+				class="h-6 w-6 text-green-600"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					stroke-width="2"
+					d="M5 13l4 4L19 7"
+				></path>
+			</svg>
+		</div>
+		<h3 class="text-lg leading-6 font-medium text-gray-900">Thank you!</h3>
+		<div class="mt-1 px-7 py-3">
+			<p class="text-sm text-gray-500">
+				Your message was sent successfully. We’ll send you a text or give you a call soon.
+			</p>
+		</div>
+	</div>
+</div>
 <!-- Modal -->
 <template x-teleport="body">
     <div x-show="reviewModalOpen" @keydown.escape.prevent.stop="reviewModalOpen = false" role="dialog" aria-modal="true" x-id="['modal-title']" :aria-labelledby="$id('modal-title')" class="fixed inset-0 z-40 pt-8 pb-20" x-trap.noscroll.inert="reviewModalOpen">
